@@ -74,16 +74,21 @@
     <option name="STATE" value="0" />
   </component>
   <component name="PropertiesComponent">
-    <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="OverrideImplement.combined" value="false" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="recentsLimit" value="5" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="dynamic.classpath" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="OverrideImplement.combined" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="dynamic.classpath" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/sqlite-jdbc-3.30.1.jar!/" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="recentsLimit" value="5" />
+    <property name="settings.editor.selected.configurable" value="IntelliLang.Configuration" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -192,7 +197,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
