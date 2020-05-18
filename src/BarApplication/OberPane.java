@@ -8,8 +8,9 @@ import java.sql.SQLException;
 public class OberPane
 {
     private Database database;
-    private TextField textFieldName;
-    private Button buttonAdd, buttonResults;
+    private TextField textFieldTableNumber;
+    private Label labelDrink;
+    private Button buttonAdd, buttonResults, buttonPlus, buttonMinus;
 
     public OberPane(GridPane p)
     {
@@ -23,7 +24,7 @@ public class OberPane
 
     private void createFXComponents()
     {
-        textFieldName = new TextField();
+        textFieldTableNumber = new TextField();
 
         buttonAdd = new Button("Add");
         buttonResults = new Button("Get results");
@@ -31,7 +32,7 @@ public class OberPane
 
     private void addtoGridPane(GridPane p)
     {
-        p.add(textFieldName, 0, 0);
+        p.add(textFieldTableNumber, 0, 0);
 
         p.add(buttonAdd, 0, 1);
         p.add(buttonResults, 1, 1);
@@ -40,7 +41,7 @@ public class OberPane
     private void buttonAddEvent()
     {
         buttonAdd.setOnAction(event -> {
-            String name = textFieldName.getText();
+            String name = textFieldTableNumber.getText();
             try
             {
                 database.insertInto();
@@ -54,7 +55,7 @@ public class OberPane
     private void buttonResultsEvent()
     {
         buttonResults.setOnAction(event -> {
-            String name = textFieldName.getText();
+            String name = textFieldTableNumber.getText();
 
             try
             {

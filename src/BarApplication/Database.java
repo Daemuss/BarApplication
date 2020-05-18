@@ -10,8 +10,8 @@ public class Database
     private ResultSet resultSet;
     private StringBuilder stringBuilder;
     private final String DB_URL = "jdbc:mysql://localhost:3306/barapp?serverTimezone=UTC";
-    private final String DB_USER = "root";
-    private final String DB_PASSWORD = "";
+    private final String DB_USER = "BarAdmin";
+    private final String DB_PASSWORD = "VodkaGoodForYou!1";
 
     public Database() {
         try
