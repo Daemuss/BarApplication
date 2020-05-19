@@ -1,6 +1,7 @@
 package BarApplication;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database
 {
@@ -27,21 +28,23 @@ public class Database
     private Connection getConnection() throws SQLException {
         Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
-        return  connection;
+        return connection;
     }
 
-    public void insertInto() throws SQLException {
-        stringBuilder = new StringBuilder();
+    public void insertInto(String drinkName, int amount, int tableNumber, boolean orderFinished) throws SQLException {
         Connection connection = this.getConnection();
-        Statement stmt = connection.createStatement();
+        String preparedInsert = "INSERT INTO bar_order VALUES(0, ?, ?, ?, ?)";
 
-        sqlQuery = stringBuilder.toString();
+        PreparedStatement insertOrder = connection.prepareStatement(preparedInsert);
+        insertOrder.setString(1, drinkName);
+        insertOrder.setInt(2, amount);
+        insertOrder.setInt(3, tableNumber);
+        insertOrder.setBoolean(4, orderFinished);
 
-        stmt.execute("INSERT INTO bar_order VALUES(0, 'test order', 1)");
+        insertOrder.execute();
 
         System.out.println("Inserting works");
 
-        stmt.close();
         connection.close();
     }
 
@@ -69,5 +72,30 @@ public class Database
         stmt.close();
         connection.close();
 
+    }
+
+    public ArrayList<String> getDrinkNames() throws SQLException {
+        ArrayList<String> drinkNamesList = new ArrayList<>();
+
+        stringBuilder = new StringBuilder();
+        Connection connection = this.getConnection();
+        Statement stmt = connection.createStatement();
+
+        stringBuilder.append("SELECT * FROM drinks");
+
+        sqlQuery = stringBuilder.toString();
+        resultSet = stmt.executeQuery(sqlQuery);
+
+        while(resultSet.next())
+        {
+            String genreName = resultSet.getString("name");
+
+            drinkNamesList.add(genreName);
+        }
+        resultSet.close();
+        stmt.close();
+        connection.close();
+
+        return drinkNamesList;
     }
 }
