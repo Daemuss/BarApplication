@@ -1,11 +1,10 @@
 package BarApplication;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Order
 {
-    private ArrayList<Drinks> drinkList;
+    private ArrayList<Drink> drinkList;
     private boolean orderFinished;
     private int amount, tableNumber;
 
@@ -18,7 +17,7 @@ public class Order
         this.orderFinished = orderFinished;
     }
 
-    public void addDrink(Drinks drinks)
+    public void addDrink(Drink drinks)
     {
         this.drinkList.add(drinks);
     }

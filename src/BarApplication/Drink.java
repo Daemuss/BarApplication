@@ -1,10 +1,10 @@
 package BarApplication;
 
-public class Drinks
+public class Drink
 {
     private String drinkName;
 
-    public Drinks(String drinkName)
+    public Drink(String drinkName)
     {
         this.drinkName = drinkName;
     }

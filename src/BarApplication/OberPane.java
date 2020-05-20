@@ -4,13 +4,12 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class OberPane
 {
     private Database database;
+    private ExecuteStatement executeStatement;
     private Order order;
-    private Drinks drinks;
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
     private Label labelHeader, labelTableNumber, labelDrinkName;
     private Button buttonOrder, buttonPlus, buttonMinus;
@@ -18,12 +17,12 @@ public class OberPane
 
     public OberPane(GridPane p) throws SQLException {
         database = new Database();
+        executeStatement = new ExecuteStatement();
 
         this.createFXComponents();
         this.addtoGridPane(p);
         this.buttonAddEvent();
         this.renderListOfDrinks(p);
-        this.buttonPlusEvent();
     }
 
     private void createFXComponents()
@@ -49,7 +48,7 @@ public class OberPane
     private void renderListOfDrinks(GridPane p) throws SQLException {
         int i = 0;
 
-        for (String drinkNames : database.getDrinkNames())
+        for (String drinkNames : executeStatement.getDrinkNames())
         {
             i++;
 
@@ -64,34 +63,43 @@ public class OberPane
             p.add(buttonMinus, 1, 2 + i);
             p.add(textFieldAmountOfDrinks, 2, 2 + i);
             p.add(buttonPlus, 3, 2 + i);
+
+            this.buttonPlusEvent();
         }
     }
 
     private void buttonAddEvent()
     {
-        Drinks tequila = new Drinks("Tequila");
+        try
+        {
+            buttonOrder.setOnAction(event -> {
+                Drink tequila = new Drink("Beer");
+                int tableNumber = Integer.parseInt(textFieldTableNumber.getText());
 
-        order = new Order(2, 1, false);
+                order = new Order(2, tableNumber, false);
 
-        buttonOrder.setOnAction(event -> {
-            order.addDrink(tequila);
-
-            try
-            {
-                database.insertInto(order.getDrinkName(), order.getAmount(), order.getTableNumber(), order.getOrderFinished());
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+                order.addDrink(tequila);
+                try
+                {
+                    executeStatement.insertInto(order.getDrinkName(), order.getAmount(), order.getTableNumber(), order.getOrderFinished());
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        catch (NumberFormatException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void buttonPlusEvent()
     {
-        int count = this.defaultAmountOfDrinks;
-
         buttonPlus.setOnAction(event ->  {
+            defaultAmountOfDrinks++;
 
+            System.out.println(defaultAmountOfDrinks);
         });
     }
 }
