@@ -26,6 +26,9 @@ public class ExecuteStatement
         insertOrder.execute();
 
         System.out.println("Inserting works");
+
+        insertOrder.close();
+        connection.close();
     }
 
     public ArrayList<String> getDrinkNames() throws SQLException {
@@ -48,6 +51,7 @@ public class ExecuteStatement
         }
         resultSet.close();
         stmt.close();
+        connection.close();
 
         return drinkNamesList;
     }

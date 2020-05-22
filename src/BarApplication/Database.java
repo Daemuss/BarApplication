@@ -6,10 +6,6 @@ import java.util.ArrayList;
 public class Database
 {
     private Connection connection;
-    private ExecuteStatement statement;
-    private String sqlQuery;
-    private ResultSet resultSet;
-    private StringBuilder stringBuilder;
     private final String DB_URL = "jdbc:mysql://localhost:3306/barapp?serverTimezone=UTC";
     private final String DB_USER = "BarAdmin";
     private final String DB_PASSWORD = "VodkaGoodForYou!1";

@@ -4,6 +4,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OberPane
 {
@@ -11,6 +12,7 @@ public class OberPane
     private ExecuteStatement executeStatement;
     private Order order;
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
+    private ArrayList<TextField> textFieldListAmountOfDrinks;
     private Label labelHeader, labelTableNumber, labelDrinkName;
     private Button buttonOrder, buttonPlus, buttonMinus;
     private int defaultAmountOfDrinks = 0;
@@ -22,7 +24,7 @@ public class OberPane
         this.createFXComponents();
         this.addtoGridPane(p);
         this.buttonAddEvent();
-        this.renderListOfDrinks(p);
+        this.renderDrinkMenu(p);
     }
 
     private void createFXComponents()
@@ -45,7 +47,22 @@ public class OberPane
         p.add(buttonOrder, 2, 2);
     }
 
-    private void renderListOfDrinks(GridPane p) throws SQLException {
+    private void renderListTextFields(GridPane p)
+    {
+        int i = 0;
+        for (TextField textFieldAmount : textFieldListAmountOfDrinks)
+        {
+            i++;
+
+            textFieldAmount.setText(String.valueOf(defaultAmountOfDrinks));
+
+            p.add(textFieldAmount, 2, 2 + i);
+        }
+    }
+
+    private void renderDrinkMenu(GridPane p) throws SQLException
+    {
+        textFieldListAmountOfDrinks = new ArrayList<>();
         int i = 0;
 
         for (String drinkNames : executeStatement.getDrinkNames())
@@ -56,16 +73,17 @@ public class OberPane
             buttonMinus = new Button("-");
             buttonPlus = new Button("+");
             textFieldAmountOfDrinks = new TextField();
-
-            textFieldAmountOfDrinks.setText(String.valueOf(defaultAmountOfDrinks));
+            textFieldListAmountOfDrinks.add(textFieldAmountOfDrinks);
 
             p.add(labelDrinkName, 0, 2 + i);
             p.add(buttonMinus, 1, 2 + i);
-            p.add(textFieldAmountOfDrinks, 2, 2 + i);
             p.add(buttonPlus, 3, 2 + i);
 
-            this.buttonPlusEvent();
+            this.buttonPlusEvent(i);
+            this.buttonMinusEvent(i);
         }
+
+        renderListTextFields(p);
     }
 
     private void buttonAddEvent()
@@ -94,12 +112,23 @@ public class OberPane
         }
     }
 
-    private void buttonPlusEvent()
+    private void buttonPlusEvent(int i)
     {
-        buttonPlus.setOnAction(event ->  {
-            defaultAmountOfDrinks++;
+        int listIndex = i - 1;
 
-            System.out.println(defaultAmountOfDrinks);
+        buttonPlus.setOnAction(event ->  {
+            defaultAmountOfDrinks = defaultAmountOfDrinks + 1;
+            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(defaultAmountOfDrinks));
+        });
+    }
+
+    private void buttonMinusEvent(int i)
+    {
+        int listIndex = i - 1;
+
+        buttonMinus.setOnAction(event ->  {
+            defaultAmountOfDrinks = defaultAmountOfDrinks - 1;
+            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(defaultAmountOfDrinks));
         });
     }
 }
