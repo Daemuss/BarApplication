@@ -5,21 +5,23 @@ import javafx.scene.layout.GridPane;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OberPane
 {
     private Database database;
-    private ExecuteStatement executeStatement;
+    private StatementManager executeStatement;
     private Order order;
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
     private ArrayList<TextField> textFieldListAmountOfDrinks;
     private Label labelHeader, labelTableNumber, labelDrinkName;
     private Button buttonOrder, buttonPlus, buttonMinus;
     private int defaultAmountOfDrinks = 0;
+    private ArrayList<Integer> amountList;
 
     public OberPane(GridPane p) throws SQLException {
         database = new Database();
-        executeStatement = new ExecuteStatement();
+        executeStatement = new StatementManager();
 
         this.createFXComponents();
         this.addtoGridPane(p);
@@ -63,13 +65,16 @@ public class OberPane
     private void renderDrinkMenu(GridPane p) throws SQLException
     {
         textFieldListAmountOfDrinks = new ArrayList<>();
+        amountList = new ArrayList<>();
         int i = 0;
 
-        for (String drinkNames : executeStatement.getDrinkNames())
+        for (Drink drinkNames : executeStatement.getDrinkNames())
         {
             i++;
 
-            labelDrinkName = new Label(drinkNames);
+            amountList.add(defaultAmountOfDrinks);
+
+            labelDrinkName = new Label(drinkNames.getDrinkName());
             buttonMinus = new Button("-");
             buttonPlus = new Button("+");
             textFieldAmountOfDrinks = new TextField();
@@ -115,20 +120,22 @@ public class OberPane
     private void buttonPlusEvent(int i)
     {
         int listIndex = i - 1;
+        AtomicInteger amount = new AtomicInteger(amountList.get(i - 1));
 
         buttonPlus.setOnAction(event ->  {
-            defaultAmountOfDrinks = defaultAmountOfDrinks + 1;
-            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(defaultAmountOfDrinks));
+            amount.getAndIncrement();
+            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amount.get()));
         });
     }
 
     private void buttonMinusEvent(int i)
     {
         int listIndex = i - 1;
+        AtomicInteger amount = new AtomicInteger(amountList.get(i - 1));
 
         buttonMinus.setOnAction(event ->  {
-            defaultAmountOfDrinks = defaultAmountOfDrinks - 1;
-            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(defaultAmountOfDrinks));
+            amount.set(amount.get() - 1);
+            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amount.get()));
         });
     }
 }

@@ -3,12 +3,12 @@ package BarApplication;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ExecuteStatement
+public class StatementManager
 {
     private Database database;
     private StringBuilder stringBuilder;
 
-    public ExecuteStatement()
+    public StatementManager()
     {
         database = new Database();
     }
@@ -31,8 +31,8 @@ public class ExecuteStatement
         connection.close();
     }
 
-    public ArrayList<String> getDrinkNames() throws SQLException {
-        ArrayList<String> drinkNamesList = new ArrayList<>();
+    public ArrayList<Drink> getDrinkNames() throws SQLException {
+        ArrayList<Drink> drinkNamesList = new ArrayList<>();
 
         stringBuilder = new StringBuilder();
         Connection connection = database.getConnection();
@@ -47,7 +47,7 @@ public class ExecuteStatement
         {
             String genreName = resultSet.getString("name");
 
-            drinkNamesList.add(genreName);
+            drinkNamesList.add(new Drink(genreName));
         }
         resultSet.close();
         stmt.close();
