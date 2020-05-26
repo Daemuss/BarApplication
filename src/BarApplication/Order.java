@@ -5,16 +5,16 @@ import java.util.ArrayList;
 public class Order
 {
     private ArrayList<Drink> drinkList;
-    private boolean orderFinished;
-    private int amount, tableNumber;
+    private boolean readyToServe, isServed;
+    private int tableNumber;
 
-    public Order(int amount, int tableNumber, boolean orderFinished)
+    public Order(int tableNumber, boolean readyToServe, boolean isServed)
     {
         this.drinkList = new ArrayList<>();
 
-        this.amount = amount;
         this.tableNumber = tableNumber;
-        this.orderFinished = orderFinished;
+        this.readyToServe = readyToServe;
+        this.isServed = isServed;
     }
 
     public void addDrink(Drink drinks)
@@ -27,18 +27,18 @@ public class Order
         return drinkList.get(0).getDrinkName();
     }
 
-    public int getAmount()
-    {
-        return amount;
-    }
-
     public int getTableNumber()
     {
         return tableNumber;
     }
 
-    public boolean getOrderFinished()
+    public boolean getReadyToServe()
     {
-        return orderFinished;
+        return readyToServe;
+    }
+
+    public boolean getIsServed()
+    {
+        return isServed;
     }
 }

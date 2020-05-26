@@ -96,15 +96,15 @@ public class OberPane
         try
         {
             buttonOrder.setOnAction(event -> {
-                Drink tequila = new Drink("Beer");
+                Drink beer = new Drink("Beer", 2.00, 2);
                 int tableNumber = Integer.parseInt(textFieldTableNumber.getText());
 
-                order = new Order(2, tableNumber, false);
+                order = new Order(tableNumber, false, false);
 
-                order.addDrink(tequila);
+                order.addDrink(beer);
                 try
                 {
-                    executeStatement.insertInto(order.getDrinkName(), order.getAmount(), order.getTableNumber(), order.getOrderFinished());
+                    executeStatement.insertInto(beer, order.getTableNumber(), order.getReadyToServe(), order.getIsServed());
                 }
                 catch (SQLException e) {
                     e.printStackTrace();

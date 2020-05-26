@@ -13,15 +13,15 @@ public class StatementManager
         database = new Database();
     }
 
-    public void insertInto(String drinkName, int amount, int tableNumber, boolean orderFinished) throws SQLException {
+    public void insertInto(Drink drink, int tableNumber, boolean readyToServe, boolean isServed) throws SQLException {
         Connection connection = database.getConnection();
         String preparedInsert = "INSERT INTO bar_order VALUES(0, ?, ?, ?, ?)";
 
         PreparedStatement insertOrder = connection.prepareStatement(preparedInsert);
-        insertOrder.setString(1, drinkName);
-        insertOrder.setInt(2, amount);
+        insertOrder.setString(1, drink.getDrinkName());
+        insertOrder.setInt(2, drink.getAmount());
         insertOrder.setInt(3, tableNumber);
-        insertOrder.setBoolean(4, orderFinished);
+        insertOrder.setBoolean(4, readyToServe);
 
         insertOrder.execute();
 
@@ -45,9 +45,9 @@ public class StatementManager
 
         while(resultSet.next())
         {
-            String genreName = resultSet.getString("name");
+            String drinkName = resultSet.getString("name");
 
-            drinkNamesList.add(new Drink(genreName));
+            drinkNamesList.add(new Drink(drinkName, 1, 2));
         }
         resultSet.close();
         stmt.close();
