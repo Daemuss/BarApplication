@@ -17,14 +17,19 @@ public class Order
         this.isServed = isServed;
     }
 
-    public void addDrink(Drink drinks)
+    public void addDrink(Drink drink)
     {
-        this.drinkList.add(drinks);
+        this.drinkList.add(drink);
     }
 
-    public String getDrinkName()
+    public void setReadyToServe(boolean readyToServe)
     {
-        return drinkList.get(0).getDrinkName();
+        this.readyToServe = readyToServe;
+    }
+
+    public ArrayList<Drink> getDrinkList()
+    {
+        return drinkList;
     }
 
     public int getTableNumber()

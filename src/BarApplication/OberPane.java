@@ -1,7 +1,9 @@
 package BarApplication;
 
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ public class OberPane
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
     private ArrayList<TextField> textFieldListAmountOfDrinks;
     private Label labelHeader, labelTableNumber, labelDrinkName;
-    private Button buttonOrder, buttonPlus, buttonMinus;
+    private Button buttonOrder, buttonPlus, buttonMinus, buttonBartenderPane;
     private int defaultAmountOfDrinks = 0;
     private ArrayList<Integer> amountList;
 
@@ -27,6 +29,7 @@ public class OberPane
         this.addtoGridPane(p);
         this.buttonAddEvent();
         this.renderDrinkMenu(p);
+        this.buttonBartenderPaneEvent();
     }
 
     private void createFXComponents()
@@ -37,6 +40,7 @@ public class OberPane
         labelTableNumber = new Label("Table number: ");
 
         buttonOrder = new Button("Order");
+        buttonBartenderPane = new Button("Bartender");
     }
 
     private void addtoGridPane(GridPane p)
@@ -47,6 +51,7 @@ public class OberPane
         p.add(textFieldTableNumber, 1, 1);
 
         p.add(buttonOrder, 2, 2);
+        p.add(buttonBartenderPane, 3, 2);
     }
 
     private void renderListTextFields(GridPane p)
@@ -136,6 +141,23 @@ public class OberPane
         buttonMinus.setOnAction(event ->  {
             amount.set(amount.get() - 1);
             textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amount.get()));
+        });
+    }
+
+    private void createBartenderPane()
+    {
+        GridPane root = new GridPane();
+        new BartenderPane(root);
+        Stage bartenderStage = new Stage();
+        bartenderStage.setTitle("Bartender");
+        bartenderStage.setScene(new Scene(root, 400, 400));
+        bartenderStage.show();
+    }
+
+    private void buttonBartenderPaneEvent()
+    {
+        buttonBartenderPane.setOnAction(event -> {
+            createBartenderPane();
         });
     }
 }
