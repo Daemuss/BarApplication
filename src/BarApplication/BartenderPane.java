@@ -57,7 +57,7 @@ public class BartenderPane {
                     p.add(amount, 1, i);
                     p.add(checboxReadyToServe, 2, i);
 
-                    checkboxClickEvent(i);
+                    checkboxClickEvent(i, p);
                 }
             }
         }
@@ -67,16 +67,45 @@ public class BartenderPane {
         }
     }
 
-    private void checkboxClickEvent(int i)
+    private void triggerRefresh(GridPane p)
+    {
+        ArrayList<Order> updatedOrders = orders;
+
+        if(updatedOrders.size() > 0)
+        {
+            int i = 0;
+
+            for (Order order : updatedOrders)
+            {
+                i++;
+
+                if(!order.getReadyToServe())
+                {
+                    checboxReadyToServe = new CheckBox();
+
+                    for (Drink drink : order.getDrinkList())
+                    {
+                        drinkName = new Label(drink.getDrinkName());
+                        amount = new Label(String.valueOf(drink.getAmount()));
+                    }
+
+                    p.add(drinkName, 0, i + 1);
+                    p.add(amount, 1, i + 1);
+                    p.add(checboxReadyToServe, 2, i + 1);
+                }
+            }
+        }
+
+    }
+
+    private void checkboxClickEvent(int i, GridPane p)
     {
         int index = i - 1;
 
         checboxReadyToServe.setOnAction(event -> {
-            System.out.print(orders.get(index).getReadyToServe());
-
             orders.get(index).setReadyToServe(true);
 
-            System.out.print(orders.get(index).getReadyToServe());
+            this.triggerRefresh(p);
         });
     }
 }
