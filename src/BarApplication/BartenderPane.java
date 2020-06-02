@@ -6,14 +6,14 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 
 public class BartenderPane {
-    private Label drinkName, amount;
+    private Label amount, tableNunber, tableNumberHeader, drinksHeader, amountHeader, labelFinished;
     private ArrayList<Order> orders;
-    private CheckBox checboxReadyToServe;
+    private TextArea textAreaDrinks;
+    private StringBuilder stringBuilder;
 
     public BartenderPane(GridPane p)
     {
         this.addToOrderList();
-
         this.showOrders(p);
     }
 
@@ -28,6 +28,7 @@ public class BartenderPane {
 
         Order order = new Order(2, false, false);
         order.addDrink(beer);
+        order.addDrink(cola);
 
         Order secondOrder = new Order(5, false, false);
         secondOrder.addDrink(tequila);
@@ -44,30 +45,57 @@ public class BartenderPane {
         orders.add(fourthOrder);
     }
 
+    private void addTitleLabels(GridPane p)
+    {
+        tableNumberHeader = new Label("Table Number");
+        drinksHeader = new Label("Drinks");
+        amountHeader = new Label("Amount of drinks");
+        labelFinished = new Label("Order Finished");
+
+        p.add(tableNumberHeader, 0, 0);
+        p.add(drinksHeader, 1, 0);
+        p.add(amountHeader, 2, 0);
+        p.add(labelFinished, 3, 0);
+    }
+
     private void showOrders(GridPane p)
     {
+        p.getChildren().clear();
+
+        this.addTitleLabels(p);
+
         if(orders.size() > 0)
         {
-            int i = 0;
+            int ordersListIndex = 0;
+            int i = 1;
 
             for (Order order : orders)
             {
+                ordersListIndex++;
                 i++;
                 if(!order.getReadyToServe())
                 {
-                    checboxReadyToServe = new CheckBox();
+                    stringBuilder = new StringBuilder();
+                    CheckBox checboxReadyToServe = new CheckBox();
+                    textAreaDrinks = new TextArea();
+                    tableNunber = new Label(String.valueOf(order.getTableNumber()));
 
+                    this.setTextAreaSettings(textAreaDrinks);
+                    p.add(tableNunber, 0, i);
                     for (Drink drink : order.getDrinkList())
                     {
-                        drinkName = new Label(drink.getDrinkName());
+                        stringBuilder.append(drink.getDrinkName());
+                        stringBuilder.append(System.lineSeparator());
+
                         amount = new Label(String.valueOf(drink.getAmount()));
+                        textAreaDrinks.setText(stringBuilder.toString());
 
-                        p.add(drinkName, 0, i);
-                        p.add(amount, 1, i);
+                        p.add(amount, 2, i);
                     }
-                    p.add(checboxReadyToServe, 2, i);
+                    p.add(textAreaDrinks, 1, i);
+                    p.add(checboxReadyToServe, 3, i);
 
-                    checkboxClickEvent(i, p);
+                    checkboxClickEvent(checboxReadyToServe, ordersListIndex, p);
                 }
             }
         }
@@ -77,48 +105,21 @@ public class BartenderPane {
         }
     }
 
-    private void triggerRefresh(GridPane p)
+    private void setTextAreaSettings(TextArea textAreaDrinks)
     {
-        ArrayList<Order> updatedOrders = orders;
-
-        p.getChildren().clear();
-
-        if(updatedOrders.size() > 0)
-        {
-            int i = 0;
-
-            for (Order order : updatedOrders)
-            {
-                i++;
-
-                if(!order.getReadyToServe())
-                {
-                    checboxReadyToServe = new CheckBox();
-
-                    for (Drink drink : order.getDrinkList())
-                    {
-                        drinkName = new Label(drink.getDrinkName());
-                        amount = new Label(String.valueOf(drink.getAmount()));
-                    }
-
-                    p.add(drinkName, 0, i);
-                    p.add(amount, 1, i);
-                    p.add(checboxReadyToServe, 2, i);
-
-                    checkboxClickEvent(i, p);
-                }
-            }
-        }
+        textAreaDrinks.setEditable(false);
+        textAreaDrinks.setPrefHeight(50);
+        textAreaDrinks.setPrefWidth(100);
     }
 
-    private void checkboxClickEvent(int i, GridPane p)
+    private void checkboxClickEvent(CheckBox checboxReadyToServe, int i, GridPane p)
     {
         int index = i - 1;
 
         checboxReadyToServe.setOnAction(event -> {
             orders.get(index).setReadyToServe(true);
 
-            this.triggerRefresh(p);
+            this.showOrders(p);
         });
     }
 }

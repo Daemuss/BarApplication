@@ -46,8 +46,9 @@ public class StatementManager
         while(resultSet.next())
         {
             String drinkName = resultSet.getString("name");
+            Double drinkPrice = resultSet.getDouble("price");
 
-            drinkNamesList.add(new Drink(drinkName, 1, 2));
+            drinkNamesList.add(new Drink(drinkName, drinkPrice, 2));
         }
         resultSet.close();
         stmt.close();

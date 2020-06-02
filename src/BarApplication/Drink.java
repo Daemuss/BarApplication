@@ -23,6 +23,11 @@ public class Drink
         return amount;
     }
 
+    public double getPrice()
+    {
+        return price;
+    }
+
     public double totalPriceOfDrink()
     {
         return price * this.getAmount();

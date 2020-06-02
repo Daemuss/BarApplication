@@ -16,7 +16,7 @@ public class OberPane
     private Order order;
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
     private ArrayList<TextField> textFieldListAmountOfDrinks;
-    private Label labelHeader, labelTableNumber, labelDrinkName;
+    private Label labelHeader, labelTableNumber, labelDrinkName, labelPrice;
     private Button buttonOrder, buttonPlus, buttonMinus, buttonBartenderPane;
     private int defaultAmountOfDrinks = 0;
     private ArrayList<Integer> amountList;
@@ -63,7 +63,7 @@ public class OberPane
 
             textFieldAmount.setText(String.valueOf(defaultAmountOfDrinks));
 
-            p.add(textFieldAmount, 2, 2 + i);
+            p.add(textFieldAmount, 3, 2 + i);
         }
     }
 
@@ -80,14 +80,16 @@ public class OberPane
             amountList.add(defaultAmountOfDrinks);
 
             labelDrinkName = new Label(drinkNames.getDrinkName());
+            labelPrice = new Label("€" + drinkNames.getPrice());
             buttonMinus = new Button("-");
             buttonPlus = new Button("+");
             textFieldAmountOfDrinks = new TextField();
             textFieldListAmountOfDrinks.add(textFieldAmountOfDrinks);
 
             p.add(labelDrinkName, 0, 2 + i);
-            p.add(buttonMinus, 1, 2 + i);
-            p.add(buttonPlus, 3, 2 + i);
+            p.add(labelPrice, 1, 2 + i);
+            p.add(buttonMinus, 2, 2 + i);
+            p.add(buttonPlus, 4, 2 + i);
 
             this.buttonPlusEvent(i);
             this.buttonMinusEvent(i);
