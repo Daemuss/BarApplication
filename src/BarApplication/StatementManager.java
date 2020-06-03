@@ -13,7 +13,8 @@ public class StatementManager
         database = new Database();
     }
 
-    public void insertInto(Drink drink, int tableNumber, boolean readyToServe, boolean isServed) throws SQLException {
+    public void insertInto(Drink drink, int tableNumber, boolean readyToServe, boolean isServed) throws SQLException
+    {
         Connection connection = database.getConnection();
         String preparedInsert = "INSERT INTO bar_order VALUES(0, ?, ?, ?, ?)";
 
@@ -31,7 +32,8 @@ public class StatementManager
         connection.close();
     }
 
-    public ArrayList<Drink> getDrinkNames() throws SQLException {
+    public ArrayList<Drink> getDrinkNames() throws SQLException
+    {
         ArrayList<Drink> drinkNamesList = new ArrayList<>();
 
         stringBuilder = new StringBuilder();
@@ -55,5 +57,45 @@ public class StatementManager
         connection.close();
 
         return drinkNamesList;
+    }
+
+    public void getOrders() throws SQLException
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        Connection connection = database.getConnection();
+        String sql = "SELECT * FROM orders, drinks, order_items GROUP BY order_items.order_id";
+
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+
+        while(resultSet.next())
+        {
+            String drinkName = resultSet.getString("name");
+            double drinkPrice = resultSet.getDouble("price");
+            int orderTableNumber = resultSet.getInt("table_number");
+            boolean orderFinisehd = resultSet.getBoolean("finished");
+            boolean orderServerd = resultSet.getBoolean("served");
+            int drinkAmount = resultSet.getInt("amount");
+
+            stringBuilder.append(drinkName);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(drinkPrice);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(orderTableNumber);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(orderFinisehd);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(orderServerd);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(drinkAmount);
+            stringBuilder.append(System.lineSeparator());
+            stringBuilder.append(System.lineSeparator());
+
+            System.out.print(stringBuilder.toString());
+        }
+
+        statement.close();
+        resultSet.close();
+        connection.close();
     }
 }

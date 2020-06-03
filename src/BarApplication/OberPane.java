@@ -25,6 +25,8 @@ public class OberPane
         database = new Database();
         executeStatement = new StatementManager();
 
+        executeStatement.getOrders();
+
         this.createFXComponents();
         this.addtoGridPane(p);
         this.buttonAddEvent();
