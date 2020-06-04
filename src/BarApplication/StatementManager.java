@@ -63,7 +63,10 @@ public class StatementManager
     {
         StringBuilder stringBuilder = new StringBuilder();
         Connection connection = database.getConnection();
-        String sql = "SELECT * FROM orders, drinks, order_items GROUP BY order_items.order_id";
+        String sql = "SELECT drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
+                "FROM order_items " +
+                "INNER JOIN drinks ON drinks.id = order_items.drink_id " +
+                "INNER JOIN orders ON orders.id = order_items.order_id";
 
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
@@ -74,7 +77,7 @@ public class StatementManager
             double drinkPrice = resultSet.getDouble("price");
             int orderTableNumber = resultSet.getInt("table_number");
             boolean orderFinisehd = resultSet.getBoolean("finished");
-            boolean orderServerd = resultSet.getBoolean("served");
+            boolean orderServed = resultSet.getBoolean("served");
             int drinkAmount = resultSet.getInt("amount");
 
             stringBuilder.append(drinkName);
@@ -85,7 +88,7 @@ public class StatementManager
             stringBuilder.append(System.lineSeparator());
             stringBuilder.append(orderFinisehd);
             stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(orderServerd);
+            stringBuilder.append(orderServed);
             stringBuilder.append(System.lineSeparator());
             stringBuilder.append(drinkAmount);
             stringBuilder.append(System.lineSeparator());
