@@ -64,9 +64,9 @@ public class StatementManager
         StringBuilder stringBuilder = new StringBuilder();
         Connection connection = database.getConnection();
         String sql = "SELECT drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
-                "FROM order_items " +
-                "INNER JOIN drinks ON drinks.id = order_items.drink_id " +
-                "INNER JOIN orders ON orders.id = order_items.order_id";
+                "FROM orders " +
+                "INNER JOIN order_items ON orders.id = order_items.order_id " +
+                "INNER JOIN drinks ON drinks.id = order_items.drink_id ";
 
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
