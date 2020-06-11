@@ -59,17 +59,72 @@ public class StatementManager
         return drinkNamesList;
     }
 
-    public void getOrders() throws SQLException
+//    public void getOrders() throws SQLException
+//    {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        Connection connection = database.getConnection();
+//        String sql = "SELECT drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
+//                "FROM orders " +
+//                "INNER JOIN order_items ON orders.id = order_items.order_id " +
+//                "INNER JOIN drinks ON drinks.id = order_items.drink_id " +
+//                "WHERE orders.finished = 0 " +
+//                "GROUP BY drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount";
+//
+//        String blah = "SELECT * " +
+//                "FROM order_items " +
+//                "LEFT JOIN drinks ON order_items.drink_id = drinks.id " +
+//                "RIGHT JOIN orders ON order_items.order_id = orders.id " +
+//                "GROUP BY drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
+//                "ORDER BY order_items.id";
+//
+//        Statement statement = connection.createStatement();
+//        ResultSet resultSet = statement.executeQuery(blah);
+//
+//        while(resultSet.next())
+//        {
+//            String drinkName = resultSet.getString("name");
+//            double drinkPrice = resultSet.getDouble("price");
+//            int orderTableNumber = resultSet.getInt("table_number");
+//            boolean orderFinisehd = resultSet.getBoolean("finished");
+//            boolean orderServed = resultSet.getBoolean("served");
+//            int drinkAmount = resultSet.getInt("amount");
+//
+//            stringBuilder.append(drinkName);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(drinkPrice);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(orderTableNumber);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(orderFinisehd);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(orderServed);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(drinkAmount);
+//            stringBuilder.append(System.lineSeparator());
+//            stringBuilder.append(System.lineSeparator());
+//
+//            System.out.print(stringBuilder.toString());
+//        }
+//
+//        statement.close();
+//        resultSet.close();
+//        connection.close();
+//    }
+
+    public ArrayList<Order> getOrderList() throws SQLException
     {
-        StringBuilder stringBuilder = new StringBuilder();
         Connection connection = database.getConnection();
-        String sql = "SELECT drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
-                "FROM orders " +
-                "INNER JOIN order_items ON orders.id = order_items.order_id " +
-                "INNER JOIN drinks ON drinks.id = order_items.drink_id ";
+        ArrayList<Order> orderList = new ArrayList<>();
+
+        String blah = "SELECT * " +
+                "FROM order_items " +
+                "LEFT JOIN drinks ON order_items.drink_id = drinks.id " +
+                "RIGHT JOIN orders ON order_items.order_id = orders.id " +
+                "GROUP BY drinks.name, drinks.price, orders.table_number, orders.finished, orders.served, order_items.amount " +
+                "ORDER BY order_items.id";
 
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(blah);
 
         while(resultSet.next())
         {
@@ -80,25 +135,17 @@ public class StatementManager
             boolean orderServed = resultSet.getBoolean("served");
             int drinkAmount = resultSet.getInt("amount");
 
-            stringBuilder.append(drinkName);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(drinkPrice);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(orderTableNumber);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(orderFinisehd);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(orderServed);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(drinkAmount);
-            stringBuilder.append(System.lineSeparator());
-            stringBuilder.append(System.lineSeparator());
+            Drink drink = new Drink(drinkName, drinkPrice, drinkAmount);
+            Order order = new Order(orderTableNumber, orderFinisehd, orderServed);
+            order.addDrink(drink);
 
-            System.out.print(stringBuilder.toString());
+            orderList.add(order);
         }
 
         statement.close();
         resultSet.close();
         connection.close();
+
+        return orderList;
     }
 }

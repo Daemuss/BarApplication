@@ -3,6 +3,7 @@ package BarApplication;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BartenderPane {
@@ -10,40 +11,43 @@ public class BartenderPane {
     private ArrayList<Order> orders;
     private TextArea textAreaDrinks;
     private StringBuilder stringBuilder;
+    private StatementManager statementManager;
 
-    public BartenderPane(GridPane p)
+    public BartenderPane(GridPane p) throws SQLException
     {
-        this.addToOrderList();
+//        this.addToOrderList();
+        this.statementManager = new StatementManager();
+        this.orders = statementManager.getOrderList();
         this.showOrders(p);
     }
 
-    private void addToOrderList()
-    {
-        orders = new ArrayList<>();
-
-        Drink beer = new Drink("Beer", 2.00, 2);
-        Drink tequila = new Drink("Tequila", 2.00, 5);
-        Drink cola = new Drink("Cola", 2.00, 2);
-        Drink water = new Drink("Water", 2.00, 5);
-
-        Order order = new Order(2, false, false);
-        order.addDrink(beer);
-        order.addDrink(cola);
-
-        Order secondOrder = new Order(5, false, false);
-        secondOrder.addDrink(tequila);
-
-        Order thirdOrder = new Order(1, false, false);
-        thirdOrder.addDrink(cola);
-
-        Order fourthOrder = new Order(4, false, false);
-        fourthOrder.addDrink(water);
-
-        orders.add(order);
-        orders.add(secondOrder);
-        orders.add(thirdOrder);
-        orders.add(fourthOrder);
-    }
+//    private void addToOrderList()
+//    {
+//        orders = new ArrayList<>();
+//
+//        Drink beer = new Drink("Beer", 2.00, 2);
+//        Drink tequila = new Drink("Tequila", 2.00, 5);
+//        Drink cola = new Drink("Cola", 2.00, 2);
+//        Drink water = new Drink("Water", 2.00, 5);
+//
+//        Order order = new Order(2, false, false);
+//        order.addDrink(beer);
+//        order.addDrink(cola);
+//
+//        Order secondOrder = new Order(5, false, false);
+//        secondOrder.addDrink(tequila);
+//
+//        Order thirdOrder = new Order(1, false, false);
+//        thirdOrder.addDrink(cola);
+//
+//        Order fourthOrder = new Order(4, false, false);
+//        fourthOrder.addDrink(water);
+//
+//        orders.add(order);
+//        orders.add(secondOrder);
+//        orders.add(thirdOrder);
+//        orders.add(fourthOrder);
+//    }
 
     private void addTitleLabels(GridPane p)
     {

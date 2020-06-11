@@ -25,7 +25,7 @@ public class OberPane
         database = new Database();
         executeStatement = new StatementManager();
 
-        executeStatement.getOrders();
+//        executeStatement.getOrders();
 
         this.createFXComponents();
         this.addtoGridPane(p);
@@ -148,7 +148,7 @@ public class OberPane
         });
     }
 
-    private void createBartenderPane()
+    private void createBartenderPane() throws SQLException
     {
         GridPane root = new GridPane();
         new BartenderPane(root);
@@ -161,7 +161,15 @@ public class OberPane
     private void buttonBartenderPaneEvent()
     {
         buttonBartenderPane.setOnAction(event -> {
-            createBartenderPane();
+            try
+            {
+                createBartenderPane();
+            }
+            catch (SQLException e)
+            {
+                System.out.print(e);
+            }
+
         });
     }
 }
