@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class OberPane
-{
-    private Database database;
+{    
     private StatementManager executeStatement;
     private Order order;
     private TextField textFieldTableNumber, textFieldAmountOfDrinks;
@@ -21,8 +20,7 @@ public class OberPane
     private int defaultAmountOfDrinks = 0;
     private ArrayList<Integer> amountList;
 
-    public OberPane(GridPane p) throws SQLException {
-        database = new Database();
+    public OberPane(GridPane p) throws SQLException {        
         executeStatement = new StatementManager();
 
 //        executeStatement.getOrders();
@@ -127,24 +125,29 @@ public class OberPane
     }
 
     private void buttonPlusEvent(int i)
-    {
-        int listIndex = i - 1;
-        AtomicInteger amount = new AtomicInteger(amountList.get(i - 1));
+    {    	
+        int listIndex = i - 1;             
 
-        buttonPlus.setOnAction(event ->  {
-            amount.getAndIncrement();
-            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amount.get()));
+        buttonPlus.setOnAction(event ->  {        	
+        	amountList.set(listIndex, amountList.get(listIndex) + 1);
+            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amountList.get(listIndex)));            
         });
     }
 
     private void buttonMinusEvent(int i)
     {
-        int listIndex = i - 1;
-        AtomicInteger amount = new AtomicInteger(amountList.get(i - 1));
-
+        int listIndex = i - 1;        
+        
         buttonMinus.setOnAction(event ->  {
-            amount.set(amount.get() - 1);
-            textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amount.get()));
+            if(amountList.get(listIndex) == 0) 
+            {            	
+            	textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amountList.get(listIndex)));            
+            }
+            else
+            {
+            	amountList.set(listIndex, amountList.get(listIndex) - 1);
+                textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amountList.get(listIndex)));
+            }
         });
     }
 
