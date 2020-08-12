@@ -82,7 +82,7 @@ public class OberPane
             amountList.add(defaultAmountOfDrinks);
 
             labelDrinkName = new Label(drinkNames.getDrinkName());
-            labelPrice = new Label("â‚¬" + drinkNames.getPrice());
+            labelPrice = new Label("€" + drinkNames.getPrice());
             buttonMinus = new Button("-");
             buttonPlus = new Button("+");
             textFieldAmountOfDrinks = new TextField();
@@ -113,7 +113,7 @@ public class OberPane
                 order.addDrink(beer);
                 try
                 {
-                    executeStatement.insertInto(beer, order.getTableNumber(), order.getReadyToServe(), order.getIsServed());
+                    executeStatement.insertInto(order.getTableNumber(), order.getReadyToServe(), order.getIsServed());
                 }
                 catch (SQLException e) {
                     e.printStackTrace();
