@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OberPane
 {    
@@ -18,7 +17,7 @@ public class OberPane
     private Label labelHeader, labelTableNumber, labelDrinkName, labelPrice;
     private Button buttonOrder, buttonPlus, buttonMinus, buttonBartenderPane;
     private int defaultAmountOfDrinks = 0;
-    private ArrayList<Integer> amountList;
+    private ArrayList<Integer> amountList;    
 
     public OberPane(GridPane p) throws SQLException {        
         executeStatement = new StatementManager();
@@ -26,8 +25,8 @@ public class OberPane
 //        executeStatement.getOrders();
 
         this.createFXComponents();
-        this.addtoGridPane(p);
         this.buttonAddEvent();
+        this.addtoGridPane(p);        
         this.renderDrinkMenu(p);
         this.buttonBartenderPaneEvent();
     }
@@ -90,45 +89,45 @@ public class OberPane
             p.add(labelPrice, 1, 2 + i);
             p.add(buttonMinus, 2, 2 + i);
             p.add(buttonPlus, 4, 2 + i);
-
+                        
             this.buttonPlusEvent(i);
-            this.buttonMinusEvent(i);
+            this.buttonMinusEvent(i);            
         }
 
         renderListTextFields(p);
     }
 
     private void buttonAddEvent()
-    {
-        try
-        {
-            buttonOrder.setOnAction(event -> {
-                Drink beer = new Drink("Beer", 2.00, 2);
-                int tableNumber = Integer.parseInt(textFieldTableNumber.getText());
-
-                order = new Order(tableNumber, false, false);
-
-                order.addDrink(beer);
-                try
-                {
-                    executeStatement.insertInto(order.getTableNumber(), order.getReadyToServe(), order.getIsServed());
-                }
-                catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        catch (NumberFormatException e)
-        {
-            e.printStackTrace();
-        }
+    {    	             	    
+        buttonOrder.setOnAction(event -> {        
+        	int i = 0;
+            int tableNumber = Integer.parseInt(textFieldTableNumber.getText());                	
+            order = new Order(tableNumber, false, false);            
+            
+            try
+            {                	
+                executeStatement.insertInto(order.getTableNumber(), order.getReadyToServe(), order.getIsServed()); 
+                
+                for(int drinkAmounts : amountList)
+                {          
+                	i++;                	
+                	if(drinkAmounts > 0)
+                	{                	                		
+                		executeStatement.insertIntoDrinkItems(executeStatement.getOrders().size(), executeStatement.getDrinkNames().get(i - 1).getDrinkId(), drinkAmounts);
+                	}                	
+                }            	                            		            	                
+            }             
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });        
     }
 
     private void buttonPlusEvent(int i)
     {    	
         int listIndex = i - 1;             
 
-        buttonPlus.setOnAction(event ->  {        	
+        buttonPlus.setOnAction(event ->  {               	
         	amountList.set(listIndex, amountList.get(listIndex) + 1);
             textFieldListAmountOfDrinks.get(listIndex).setText(String.valueOf(amountList.get(listIndex)));            
         });

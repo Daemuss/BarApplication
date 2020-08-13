@@ -17,7 +17,7 @@ public class BartenderPane {
     {
 //        this.addToOrderList();
         this.statementManager = new StatementManager();
-        this.orders = statementManager.getOrderList();
+        this.orders = statementManager.getOrderListWithItems();
         this.showOrders(p);
     }
 

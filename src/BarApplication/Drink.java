@@ -4,15 +4,21 @@ public class Drink
 {
     private String drinkName;
     private double price;
-    private int amount;
+    private int drinkId, amount;
 
-    public Drink(String drinkName, double price, int amount)
+    public Drink(int drinkId, String drinkName, double price, int amount)
     {
+    	this.drinkId = drinkId;
         this.drinkName = drinkName;
         this.price = price;
         this.amount = amount;
     }
 
+    public int getDrinkId()
+    {
+    	return drinkId;
+    }
+    
     public String getDrinkName()
     {
         return  drinkName;

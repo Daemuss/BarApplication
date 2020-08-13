@@ -13,25 +13,35 @@ public class StatementManager
     {    
     	database = new Database();
     	String preparedInsert = "INSERT INTO orders VALUES(0, ?, ?, ?)";  
-    	String preparedInsertOrderItems = "INSERT INTO order_items VALUES(0, ?, ?, ?)";
+    	
     	
 		try (Connection connection = database.getConnection();
-			 PreparedStatement insertOrder = connection.prepareStatement(preparedInsert);
-			 PreparedStatement insertOrderItems = connection.prepareStatement(preparedInsertOrderItems);
+			 PreparedStatement insertOrder = connection.prepareStatement(preparedInsert);			 
 		) {					        	       	      	        
 	        insertOrder.setInt(1, tableNumber);
 	        insertOrder.setBoolean(2, readyToServe);
-	        insertOrder.setBoolean(3, false);
-	        
-	        insertOrderItems.setInt(1, 3);
-	        insertOrderItems.setInt(2, 3);
-	        insertOrderItems.setInt(3, 3);
+	        insertOrder.setBoolean(3, false);	        	       
 
-	        insertOrder.execute();
-	        insertOrderItems.execute();
+	        insertOrder.execute();	        
 
 	        System.out.println("Inserting works");	      
 		}		
+    }
+    
+    public void insertIntoDrinkItems(int orderId, int drinkId, int drinkAmount) throws SQLException
+    {
+    	database = new Database();
+    	String preparedInsertOrderItems = "INSERT INTO order_items VALUES(0, ?, ?, ?)";
+    	
+    	try (Connection connection = database.getConnection();
+    		 PreparedStatement insertOrderItems = connection.prepareStatement(preparedInsertOrderItems);	
+    	) {
+    		insertOrderItems.setInt(1, orderId);
+	        insertOrderItems.setInt(2, drinkId);
+	        insertOrderItems.setInt(3, drinkAmount);
+	        
+	        insertOrderItems.execute();
+    	}
     }
 
     // Returns the drink names from the database
@@ -49,17 +59,41 @@ public class StatementManager
         ) {        	           
             while(resultSet.next())
             {
+            	int drinkId = resultSet.getInt("id");
                 String drinkName = resultSet.getString("name");
-                Double drinkPrice = resultSet.getDouble("price");
+                Double drinkPrice = resultSet.getDouble("price");                
 
-                drinkNamesList.add(new Drink(drinkName, drinkPrice, 2));
+                drinkNamesList.add(new Drink(drinkId, drinkName, drinkPrice, 2));
             }
             return drinkNamesList;
         }       
-    }   
+    }
+    
+    public ArrayList<Order> getOrders() throws SQLException
+    {
+    	database = new Database();
+    	ArrayList<Order> orderList = new ArrayList<>();
+    	String sqlQuery = "SELECT * FROM orders";
+    	
+    	try (Connection connection = database.getConnection();
+    		 Statement stmt = connection.createStatement();
+        	 ResultSet resultSet = stmt.executeQuery(sqlQuery);		
+    	) {    		
+    		while(resultSet.next())
+            {
+            	int orderId = resultSet.getInt("id");
+                int orderTableNumber = resultSet.getInt("table_number");
+                boolean orderReady = resultSet.getBoolean("finished");
+                boolean orderServed = resultSet.getBoolean("served");  
 
-    // Returns a list of orders
-    public ArrayList<Order> getOrderList() throws SQLException
+                orderList.add(new Order(orderId, orderTableNumber, orderReady, orderServed));
+            }
+    		return orderList;
+    	}
+    }
+
+    // Returns a list of orders with drink items
+    public ArrayList<Order> getOrderListWithItems() throws SQLException
     {
     	database = new Database();
     	ArrayList<Order> orderList = new ArrayList<>();
@@ -76,6 +110,7 @@ public class StatementManager
     	) {
     		while(resultSet.next())
             {
+    			int drinkId = resultSet.getInt("id");
                 String drinkName = resultSet.getString("name");
                 double drinkPrice = resultSet.getDouble("price");
                 int orderTableNumber = resultSet.getInt("table_number");
@@ -83,7 +118,7 @@ public class StatementManager
                 boolean orderServed = resultSet.getBoolean("served");
                 int drinkAmount = resultSet.getInt("amount");
 
-                Drink drink = new Drink(drinkName, drinkPrice, drinkAmount);
+                Drink drink = new Drink(drinkId, drinkName, drinkPrice, drinkAmount);
                 Order order = new Order(orderTableNumber, orderFinisehd, orderServed);
                 order.addDrink(drink);
 
